@@ -6,8 +6,6 @@ var uiController = (function() {
               inputValue: ".add__value",
               addBtn: ".add__btn"
               };            
-
-
               return {
                             getInput: function() {
                             return {
@@ -36,16 +34,30 @@ var financeController = (function(){
                             this.description = description;
                             this.value = value;
                             }
-
                             var data = {
-                                          allItems: {
+                                          items: {
                                           inc: [],
                                           exp: []
                                           },
-                                          
                                           totals: {
                                           inc: 0,
                                           exp: 0,
+                                          }
+                            }
+                            return {
+                                          addItem: function(type, desc, val){
+                                                        
+                                          var item, id;
+                                          if(data.items[type].lenght === 0) id = 1;
+                                          else {
+                                          data.items[type][data.items[type].lenght - 1].id+1;
+                                          }
+                                          if(type === "inc"){
+                                          item = new Income(id, desc, val);
+                                          } else {
+                                          item = new Expense(id, desc, val);
+                                          }
+                                                        data.items[type].push(item);
                                           }
                             }
 })();
@@ -55,9 +67,9 @@ var appController = (function(uiController, financeController){
               
               var ctrlAddItem = function(){
                             // 1. Oruulah ogogdliin delgetsees olj awna.
-                            console.log(uiController.getInput());
+                            var input = uiController.getInput();
                             // 2. Olj awsan ogogdloo sanhuugiin controllert damjuulj tend hadgalna.
-
+                            financeController.addItem(input.type, input.description, input.value);
                             // 3. Olj awsan ogogdluude web eeree tohiroh hesegt gargana.
 
                             // 4. Tosviig tootsoolno.
