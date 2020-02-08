@@ -30,9 +30,7 @@ var financeController = (function(){
 
 // Programmin holbogch controller
 var appController = (function(uiController, financeController){
-
-              var DOM = uiController.getDOMstrings();
-
+              
               var ctrlAddItem = function(){
                             // 1. Oruulah ogogdliin delgetsees olj awna.
                             console.log(uiController.getInput());
@@ -46,14 +44,28 @@ var appController = (function(uiController, financeController){
 
               }
 
-              document.querySelector(DOM.addBtn).addEventListener("click", function(){
-                            ctrlAddItem();
-              });
+              var setupEventListeners = function() {
 
-              document.addEventListener("keypress", function(event) 
-              {
-                            if (event.keyCode === 13 || event.which === 13) {
-                            ctrlAddItem();
+                            var DOM = uiController.getDOMstrings();
+
+                            document.querySelector(DOM.addBtn).addEventListener("click", function(){
+                                          ctrlAddItem();
+                            });
+              
+                            document.addEventListener("keypress", function(event) 
+                            {
+                                          if (event.keyCode === 13 || event.which === 13) {
+                                          ctrlAddItem();
+                                          }
+                            });
+              };
+
+              return {
+                            init: function(){
+                                          console.log("Application started...")
+                                          setupEventListeners();
                             }
-              })
+              }
 })(uiController, financeController);
+
+appController.init();
