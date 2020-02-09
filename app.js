@@ -4,7 +4,9 @@ var uiController = (function() {
               inputType: ".add__type",
               inputDescription: ".add__description",
               inputValue: ".add__value",
-              addBtn: ".add__btn"
+              addBtn: ".add__btn",
+              incomeList: ".income__list",
+              expenseList: ".expenses_list"
 };
               return {
               getInput: function() {
@@ -18,15 +20,25 @@ var uiController = (function() {
               return DOMstrings;
 },
 
+clearFields: function(){
+              var fields = document.querySelectorAll(DOMstrings.inputDescription + ', ' + DOMstrings.inputValue
+              );
+              // Convert List to Array
+              var fieldsArr = Array.prototype.slice.call(fields);
+              fieldsArr.forEach(function(el, index, array){
+                            el.value = "";
+              });
+              fieldsArr[0].focus();
+},
               addListItem: function(item, type) {
               // Orlogo zarlagiin element iig aguulsan html iig beltgene
               var html, list;
               if (type === "inc") {
-              list = ".income__list";
+              list = DOMstrings.incomeList;
               html =
               '<div class="item clearfix" id="income-%id%"><div class="item__description">$$DESCRIPTION$$</div><div class="right clearfix"><div class="item__value">$$VALUE$$</div><div class="item__delete">            <button class="item__delete--btn"><i class="ion-ios-close-outline"></i></button></div>        </div></div>';
               } else {
-              list = ".expenses__list";
+              list = DOMstrings.expenseList;;
               html =
               '<div class="item clearfix" id="expense-%id%"><div class="item__description">$$DESCRIPTION$$</div>          <div class="right clearfix"><div class="item__value">$$VALUE$$</div><div class="item__percentage">21%</div><div class="item__delete"><button class="item__delete--btn">                <i class="ion-ios-close-outline"></i></button></div></div></div>';
               }
@@ -97,6 +109,7 @@ var uiController = (function() {
               );
               // 3. Olj awsan ogogdluude web eeree tohiroh hesegt gargana.
               uiController.addListItem(item, input.type);
+              uiController.clearFields();
               // 4. Tosviig tootsoolno.
               // 5. Etssiin uldegdel tootsoog delgetsend gargana.
               };
