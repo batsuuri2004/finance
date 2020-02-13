@@ -55,7 +55,10 @@ var uiController = (function() {
                     document.querySelector(DOMstrings.percentageLabel).textContent = tusuv.huvi;
                   }
                 },
-
+                deleteListItem: function(id){
+                  var el = document.getElementById(id);
+                  el.parentNode.removeChild(el);
+                },
                 addListItem: function(item, type) {
                   // Orlogo zarlagiin element iig aguulsan html iig beltgene
                   var html, list;
@@ -228,6 +231,7 @@ var uiController = (function() {
                   // 1. Sanhuugiin modulaas type, id g ashiglaad ustgana.
                   financeController.deleteItem(type, itemId)
                   // 2. Delgets deerees ene elementiig ustgana.
+                  uiController.deleteListItem(id);
                   // 3. Uldegdel tootsoog shinechilj haruulna.
                   }
                 });
