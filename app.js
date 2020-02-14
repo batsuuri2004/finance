@@ -12,17 +12,43 @@ var uiController = (function() {
     expeseLabel: ".budget__expenses--value",
     percentageLabel: ".budget__expenses--percentage",
     containerDiv: ".container",
-    expensePercentageLabel: ".item__percentage"
+    expensePercentageLabel: ".item__percentage",
+    dateLabel: ".budget__title--month",
   };
-
   var nodeListForeach = function(list, callback) {
     for (var i = 0; i < list.length; i++) {
       callback(list[i], i);
     }
   };
+  var formatMoney = function(too, type){
+    too = "" + too
+    var x = too
+    .split("")
+    .reverse()
+    .join("");
+    var y = "";
+    var count = 1;
 
-  return {
-    getInput: function() {
+    for(var i = 0; i < x.length; i++){
+      y = y + x[i];
+      if(count%3 === 0) y = y + ",";
+      count++;
+    }
+    var z = y
+    .split("")
+    .reverse()
+    .join("");
+    if(z[0] === ",") z = z.substr(1, z.length - 1);
+    if(type === "inc") z = "+ " + z;
+    else z = "- " + z;
+    return z;
+  }
+  return { 
+    displayDate: function(){
+      var unuudur = new Date();
+      document.querySelector(DOMstrings.dateLabel).textContent = unuudur.getFullYear() + " оны " + unuudur.getMonth() + " сарын ";
+    },
+    getInput: function(){
       return {
         type: document.querySelector(DOMstrings.inputType).value, // exp, inc
         description: document.querySelector(DOMstrings.inputDescription).value,
@@ -62,11 +88,14 @@ var uiController = (function() {
     },
 
     tusviigUzuuleh: function(tusuv) {
-      document.querySelector(DOMstrings.tusuvLabel).textContent = tusuv.tusuv;
+      var type;
+      if(tusuv.tusuv > 0) type = 'inc';
+      else type = 'exp';
+      document.querySelector(DOMstrings.tusuvLabel).textContent = formatMoney(tusuv.tusuv, type);
       document.querySelector(DOMstrings.incomeLabel).textContent =
-        tusuv.totalInc;
+        formatMoney(tusuv.totalInc, 'inc');
       document.querySelector(DOMstrings.expeseLabel).textContent =
-        tusuv.totalExp;
+      formatMoney(tusuv.totalExp, 'exp');
 
       if (tusuv.huvi !== 0) {
         document.querySelector(DOMstrings.percentageLabel).textContent =
@@ -97,7 +126,7 @@ var uiController = (function() {
       // Ter html dotroo orlogo zarlagiin utguudiig replace ashiglaj oorchilj ogno.
       html = html.replace("%id%", item.id);
       html = html.replace("$$DESCRIPTION$$", item.description);
-      html = html.replace("$$VALUE$$", item.value);
+      html = html.replace("$$VALUE$$", formatMoney(item.value, type));
 
       // Betlgesen html ee dom ruu hiij ogno
       document.querySelector(list).insertAdjacentHTML("beforeend", html);
@@ -317,6 +346,7 @@ var appController = (function(uiController, financeController) {
   return {
     init: function() {
       console.log("Application started...");
+      uiController.displayDate();
       uiController.tusviigUzuuleh({
         tusuv: 0,
         huvi: 0,
